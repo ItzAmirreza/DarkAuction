@@ -1,0 +1,10 @@
+name: SBDarkAuction
+version: ${project.version}
+main: me.gamepixel.sbdarkauction.SBDarkAuction
+api-version: 1.16
+authors: [Dead_Light, MuffinPlayz]
+description: Hypixel Dark Auction premade for Gamepixel
+depend: [Citizens]
+commands:
+  da:
+    description: the main command which is used for server admin

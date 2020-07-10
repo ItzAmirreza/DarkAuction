@@ -1,0 +1,22 @@
+#SBDarkAuction
+#By Dead_Light & MuffinPlayz
+#Copyright July 2020
+
+
+#where an npc spawns before the DarkAuction starts and let them in...
+entrance-npc-coordinates: "10/80/121"
+
+#where they will get teleported after they where close to entrance npc
+teleport-at-start: "10/25/123"
+
+#Item showcase location
+itemshowcase: "10//123/123"
+
+#An amount of money that is required at least to have to let you enter the DarkAuction
+money-required-to-enter: 500
+
+#How many players can enter the DarkAuction | To prevent so much player inside of the DarkAuction and make it more valuable.
+limitplayer: 15
+
+
+
