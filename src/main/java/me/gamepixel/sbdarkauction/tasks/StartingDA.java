@@ -10,7 +10,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,37 @@ public class StartingDA {
         }, 20 * 15);
 
 
+        startTheProcess(Utils.auctionitems);
+
     }
+
+
+    public void startTheProcess(List<ItemStack> items) {
+
+        if (items.size() == 0) {
+
+            Bukkit.broadcastMessage(Utils.color(Utils.prefix + "&cNo items for today's auction!"));
+
+        } else {
+
+            for (ItemStack i : items) {
+
+                Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
+                Item item = location.getWorld().dropItem(location, i);
+                item.setCustomName(item.getName());
+                item.setCustomNameVisible(true);
+                item.setVelocity(new Vector());
+                item.setPickupDelay(32767);
+                item.setInvulnerable(true);
+
+
+            }
+
+
+        }
+
+    }
+
+
 
 }

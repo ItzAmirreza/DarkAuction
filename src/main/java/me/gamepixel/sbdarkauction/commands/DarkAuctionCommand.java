@@ -6,6 +6,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.rmi.CORBA.Util;
 
@@ -44,6 +45,26 @@ public class DarkAuctionCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("additem")) {
 
                         //soon //soon //soon <--- Under Development (Needs Item System API)
+
+                        //test
+                        try {
+                            ItemStack item = player.getInventory().getItemInMainHand();
+                            if (item != null) {
+                                Utils.auctionitems.add(item);
+                                player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
+
+                            } else {
+                                player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand!"));
+
+                            }
+
+                        } catch (Exception ex) {
+
+                            player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand!"));
+
+                        }
+
+
 
                     } else if (args[0].equalsIgnoreCase("reload")) {
 
