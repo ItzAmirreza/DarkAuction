@@ -18,6 +18,9 @@ import java.util.Random;
 
 public class StartingDA {
 
+    private ArmorStand anarmorstand;
+    private ArmorStand antimerarmor;
+    private Item anitem;
     private int countnum = 10;
     private int countdown = 0;
 
@@ -133,7 +136,8 @@ public class StartingDA {
 
     public void startCountDown(ArmorStand armorStand, Item item) {
 
-
+        anarmorstand = armorStand;
+        anitem = item;
         if (Utils.timerstatus.containsKey("status")) {
 
             Location newloc = new Location(armorStand.getWorld(), armorStand.getLocation().getX(), armorStand.getLocation().getY() - 1, armorStand.getLocation().getZ());
@@ -142,6 +146,7 @@ public class StartingDA {
             timerarmor.setVisible(false);
             timerarmor.setArms(false);
             timerarmor.setGravity(false);
+            antimerarmor = timerarmor;
             Utils.timerstatus.replace("status", true);
 
         } else {
@@ -152,32 +157,38 @@ public class StartingDA {
             timerarmor.setVisible(false);
             timerarmor.setArms(false);
             timerarmor.setGravity(false);
-
+            antimerarmor = timerarmor;
             Utils.timerstatus.put("status", true);
-            Bukkit.getScheduler().scheduleSyncRepeatingTask(SBDarkAuction.getInstance(), new Runnable() {
-                @Override
-                public void run() {
+            startTimerTask();
 
-                    if (countnum <= countdown && Utils.timerstatus.get("status")) {
-
-                        armorStand.remove();
-                        timerarmor.remove();
-                        item.remove();
-                        EntranceNpc.despawn();
-                        countnum = 10;
-                        Utils.timerstatus.replace("status", false);
-                    } else if (Utils.timerstatus.get("status")){
-                        timerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
-                        timerarmor.setCustomNameVisible(true);
-                        countnum -= 1;
-                    }
-
-                }
-            }, 60, 20);
         }
 
 
 
+    }
+
+    public void startTimerTask() {
+
+        Bukkit.getScheduler().scheduleSyncRepeatingTask(SBDarkAuction.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+
+                if (countnum <= countdown && Utils.timerstatus.get("status")) {
+
+                    anarmorstand.remove();
+                    antimerarmor.remove();
+                    anitem.remove();
+                    EntranceNpc.despawn();
+                    countnum = 10;
+                    Utils.timerstatus.replace("status", false);
+                } else if (Utils.timerstatus.get("status")){
+                    antimerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
+                    antimerarmor.setCustomNameVisible(true);
+                    countnum -= 1;
+                }
+
+            }
+        }, 60, 20);
     }
 
 
