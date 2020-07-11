@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class Utils {
@@ -30,9 +31,11 @@ public class Utils {
 
         List<String> splited = Arrays.asList(stringloc.split(":"));
 
-        return new Location(Bukkit.getWorld(splited.get(3)), Integer.parseInt(splited.get(0)), Integer.parseInt(splited.get(1)), Integer.parseInt(splited.get(2)));
+        return new Location(Bukkit.getWorld(splited.get(3)), Integer.parseInt(splited.get(0)) + 0.5, Integer.parseInt(splited.get(1)), Integer.parseInt(splited.get(2)) + 0.5);
     }
 
     public static List<ItemStack> auctionitems = new ArrayList<>();
+
+    public static HashMap<String, Boolean> timerstatus = new HashMap<>();
 
 }

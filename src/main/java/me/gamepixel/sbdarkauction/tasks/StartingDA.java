@@ -8,18 +8,18 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class StartingDA {
 
+    private int countnum = 10;
+    private int countdown = 0;
 
     NPC EntranceNpc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     public void entrancenpcspawn() {
@@ -68,13 +68,20 @@ public class StartingDA {
             }
         }, 20 * 15);
 
+        Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
+            @Override
+            public void run() {
 
-        startTheProcess(Utils.auctionitems);
+                startFirstItem(Utils.auctionitems);
+
+            }
+        }, 20 * 5);
+
 
     }
 
 
-    public void startTheProcess(List<ItemStack> items) {
+    public void startFirstItem(List<ItemStack> items) {
 
         if (items.size() == 0) {
 
@@ -82,23 +89,97 @@ public class StartingDA {
 
         } else {
 
-            for (ItemStack i : items) {
+            Random random = new Random();
 
-                Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
-                Item item = location.getWorld().dropItem(location, i);
-                item.setCustomName(item.getName());
-                item.setCustomNameVisible(true);
-                item.setVelocity(new Vector());
-                item.setPickupDelay(32767);
-                item.setInvulnerable(true);
+            ItemStack itemst = items.get(random.nextInt(items.size()));
 
+            Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
 
-            }
-
+            Item item = location.getWorld().dropItem(location, itemst);
+            item.setVelocity(new Vector());
+            item.setPickupDelay(32767);
+            item.setInvulnerable(true);
+            spawnArmorStand(location, item);
 
         }
 
     }
+
+    public void spawnArmorStand(Location location, Item item) {
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+                armorStand.setVisible(false);
+                armorStand.setArms(false);
+                armorStand.setGravity(false);
+                String itemlore = item.getItemStack().getItemMeta().getDisplayName();
+                if (item.getItemStack().getItemMeta().hasLore()) {
+                    for (String i : item.getItemStack().getItemMeta().getLore()) {
+                        itemlore = itemlore + "\n " + i;
+
+                    }
+                }
+
+                armorStand.setCustomName(Utils.color(itemlore));
+                armorStand.setCustomNameVisible(true);
+                startCountDown(armorStand, item);
+            }
+        }, 20 * 3);
+
+    }
+
+
+    public void startCountDown(ArmorStand armorStand, Item item) {
+
+
+        if (Utils.timerstatus.containsKey("status")) {
+
+            Location newloc = new Location(armorStand.getWorld(), armorStand.getLocation().getX(), armorStand.getLocation().getY() - 1, armorStand.getLocation().getZ());
+
+            ArmorStand timerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
+            timerarmor.setVisible(false);
+            timerarmor.setArms(false);
+            timerarmor.setGravity(false);
+            Utils.timerstatus.replace("status", true);
+
+        } else {
+
+            Location newloc = new Location(armorStand.getWorld(), armorStand.getLocation().getX(), armorStand.getLocation().getY() - 1, armorStand.getLocation().getZ());
+
+            ArmorStand timerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
+            timerarmor.setVisible(false);
+            timerarmor.setArms(false);
+            timerarmor.setGravity(false);
+
+            Utils.timerstatus.put("status", true);
+            Bukkit.getScheduler().scheduleSyncRepeatingTask(SBDarkAuction.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+
+                    if (countnum <= countdown && Utils.timerstatus.get("status")) {
+
+                        armorStand.remove();
+                        timerarmor.remove();
+                        item.remove();
+                        EntranceNpc.despawn();
+                        countnum = 10;
+                        Utils.timerstatus.replace("status", false);
+                    } else if (Utils.timerstatus.get("status")){
+                        timerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
+                        timerarmor.setCustomNameVisible(true);
+                        countnum -= 1;
+                    }
+
+                }
+            }, 60, 20);
+        }
+
+
+
+    }
+
 
 
 
