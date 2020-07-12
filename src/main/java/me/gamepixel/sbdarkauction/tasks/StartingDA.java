@@ -274,6 +274,7 @@ public class StartingDA {
         teleportBack();
         Utils.auctionlevel.remove("level");
         Utils.inauction.clear();
+        playersinauction.clear();
     }
 
     public void teleportBack() {
