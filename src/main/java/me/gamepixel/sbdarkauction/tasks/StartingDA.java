@@ -20,6 +20,7 @@ public class StartingDA {
 
     private ArmorStand anarmorstand;
     private ArmorStand antimerarmor;
+    private List<Player> playersinauction = new ArrayList<>();
     private Item anitem;
     private int countnum = 10;
     private int countdown = 0;
@@ -62,14 +63,15 @@ public class StartingDA {
             public void run() {
 
                 for (Player player : players) {
-
+                    playersinauction.add(player);
+                    Utils.inauction.put(player.getName(), player.getLocation());
                     player.teleport(location);
                     player.sendMessage(Utils.color(Utils.prefix + "&7 You have entered the Secret Auction House!"));
 
                 }
 
             }
-        }, 20 * 15);
+        }, 20 * 5);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
             @Override
@@ -84,6 +86,7 @@ public class StartingDA {
     }
 
 
+    //first item auction
     public void startFirstItem(List<ItemStack> items) {
 
         if (items.size() == 0) {
@@ -102,10 +105,48 @@ public class StartingDA {
             item.setVelocity(new Vector());
             item.setPickupDelay(32767);
             item.setInvulnerable(true);
+            item.setGravity(false);
+            Utils.auctionlevel.put("level", 1);
             spawnArmorStand(location, item);
 
         }
 
+    }
+
+    //second item auction
+    public void startSecondItem() {
+        List<ItemStack> items = Utils.auctionitems;
+        Random random = new Random();
+        ItemStack itemst = items.get(random.nextInt(items.size()));
+
+        Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
+
+        Item item = location.getWorld().dropItem(location, itemst);
+        item.setVelocity(new Vector());
+        item.setPickupDelay(32767);
+        item.setInvulnerable(true);
+        item.setGravity(false);
+        Utils.auctionlevel.replace("level", 2);
+        spawnArmorStand(location, item);
+
+
+    }
+
+    public void startThirdItem() {
+
+        List<ItemStack> items = Utils.auctionitems;
+        Random random = new Random();
+        ItemStack itemst = items.get(random.nextInt(items.size()));
+
+        Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
+
+        Item item = location.getWorld().dropItem(location, itemst);
+        item.setVelocity(new Vector());
+        item.setPickupDelay(32767);
+        item.setInvulnerable(true);
+        item.setGravity(false);
+        Utils.auctionlevel.replace("level", 3);
+        spawnArmorStand(location, item);
     }
 
     public void spawnArmorStand(Location location, Item item) {
@@ -178,9 +219,9 @@ public class StartingDA {
                     anarmorstand.remove();
                     antimerarmor.remove();
                     anitem.remove();
-                    EntranceNpc.despawn();
                     countnum = 10;
                     Utils.timerstatus.replace("status", false);
+                    executeNextLevel();
                 } else if (Utils.timerstatus.get("status")){
                     antimerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
                     antimerarmor.setCustomNameVisible(true);
@@ -191,6 +232,60 @@ public class StartingDA {
         }, 60, 20);
     }
 
+    public void executeNextLevel() {
+        int level = Utils.auctionlevel.get("level");
+
+        if (level == 1) {
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    startSecondItem();
+
+
+                }
+            }, 20 * 3);
+
+        } else if (level == 2) {
+
+            Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    startThirdItem();
+                }
+            }, 20 * 3);
+
+        } else if (level == 3) {
+            //close the auction
+            Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
+                @Override
+                public void run() {
+                    closeAuction();
+                }
+            }, 20 * 3);
+
+        }
+
+    }
+
+    public void closeAuction() {
+
+        EntranceNpc.despawn();
+        teleportBack();
+        Utils.auctionlevel.remove("level");
+        Utils.inauction.clear();
+    }
+
+    public void teleportBack() {
+
+        for (Player player : playersinauction) {
+
+            player.teleport(Utils.inauction.get(player.getName()));
+            player.sendMessage(Utils.color(Utils.prefix + "&bHope you had a great time :)"));
+
+        }
+
+    }
 
 
 
