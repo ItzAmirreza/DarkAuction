@@ -38,4 +38,8 @@ public class Utils {
 
     public static HashMap<String, Boolean> timerstatus = new HashMap<>();
 
+    public static HashMap<String, Integer> auctionlevel = new HashMap<>();
+
+    public static HashMap<String, Location> inauction = new HashMap<>();
+
 }
