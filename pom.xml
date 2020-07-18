@@ -66,19 +66,34 @@
             <id>everything</id>
             <url>http://repo.citizensnpcs.co/</url>
         </repository>
+        <repository>
+            <id>sb-core</id>
+            <name>SB Core</name>
+            <url>http://158.58.189.135:8081/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
             <version>2.0.27-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.minuskube.inv</groupId>
+            <artifactId>smart-invs</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>me.muffinplayz</groupId>
+            <artifactId>sb-core</artifactId>
+            <version>0.0.11</version>
         </dependency>
     </dependencies>
 </project>
