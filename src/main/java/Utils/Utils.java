@@ -36,10 +36,16 @@ public class Utils {
 
     public static List<ItemStack> auctionitems = new ArrayList<>();
 
+    public static ItemStack itemRightNow;
+
     public static HashMap<String, Boolean> timerstatus = new HashMap<>();
 
     public static HashMap<String, Integer> auctionlevel = new HashMap<>();
 
     public static HashMap<String, Location> inauction = new HashMap<>();
+
+    public static HashMap<String, Integer> topbid = new HashMap<>();
+
+    public static me.muffinplayz.sbcore.Main sbCore = (me.muffinplayz.sbcore.Main) Bukkit.getServer().getPluginManager().getPlugin("SBCore");
 
 }

@@ -32,7 +32,6 @@ public final class SBDarkAuction extends JavaPlugin {
     public void onDisable() {
 
 
-
         getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cPlugin Has Been Disabled."));
     }
 }

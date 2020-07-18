@@ -4,7 +4,6 @@ import Utils.Utils;
 import me.gamepixel.sbdarkauction.SBDarkAuction;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
-import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.trait.SkinTrait;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -98,6 +97,7 @@ public class StartingDA {
             Random random = new Random();
 
             ItemStack itemst = items.get(random.nextInt(items.size()));
+            Utils.itemRightNow = itemst;
 
             Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
 
@@ -118,7 +118,7 @@ public class StartingDA {
         List<ItemStack> items = Utils.auctionitems;
         Random random = new Random();
         ItemStack itemst = items.get(random.nextInt(items.size()));
-
+        Utils.itemRightNow = itemst;
         Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
 
         Item item = location.getWorld().dropItem(location, itemst);
@@ -137,7 +137,7 @@ public class StartingDA {
         List<ItemStack> items = Utils.auctionitems;
         Random random = new Random();
         ItemStack itemst = items.get(random.nextInt(items.size()));
-
+        Utils.itemRightNow = itemst;
         Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
 
         Item item = location.getWorld().dropItem(location, itemst);
