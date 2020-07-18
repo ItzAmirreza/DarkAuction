@@ -1,5 +1,7 @@
 package me.gamepixel.sbdarkauction.events;
 
+import Utils.Utils;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -12,7 +14,12 @@ public class PlayerInteractWithEntity implements Listener {
 
         if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 
-            if (e.getRightClicked().getMetadata())
+            ArmorStand stand = (ArmorStand) e.getRightClicked();
+            if (stand == Utils.antimerstand) {
+
+                Utils.gui.open(e.getPlayer());
+
+            }
 
         }
 

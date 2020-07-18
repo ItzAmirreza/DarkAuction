@@ -2,6 +2,7 @@ package me.gamepixel.sbdarkauction.tasks;
 
 import Utils.Utils;
 import me.gamepixel.sbdarkauction.SBDarkAuction;
+import me.gamepixel.sbdarkauction.guilist.FirstGui;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.trait.SkinTrait;
@@ -18,10 +19,10 @@ import java.util.Random;
 public class StartingDA {
 
     private ArmorStand anarmorstand;
-    private ArmorStand antimerarmor;
+    private ArmorStand antimerarmor = Utils.antimerstand;
     private List<Player> playersinauction = new ArrayList<>();
     private Item anitem;
-    private int countnum = 10;
+    public static int countnum = 10;
     private int countdown = 0;
 
     NPC EntranceNpc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
@@ -221,7 +222,22 @@ public class StartingDA {
                     anitem.remove();
                     countnum = 10;
                     Utils.timerstatus.replace("status", false);
-                    executeNextLevel();
+                    if (Utils.topbidplayer.isEmpty()) {
+                        playersinauction.forEach(player -> {
+                            Utils.gui.close(player);
+                            player.sendMessage(Utils.color("&7No one has bidded for this item... Poor item..."));
+                        });
+                        executeNextLevel();
+                    } else {
+                        Player player = Bukkit.getPlayer(Utils.topbidplayer.get("top"));
+                        player.getInventory().addItem(anitem.getItemStack());
+                        playersinauction.forEach(player1 -> {
+                            Utils.gui.close(player1);
+                            player1.sendMessage(Utils.color("&e&l" + Utils.topbidplayer.get("top") + " &7Won the item for " + "&e" + Utils.topbidplayer.get(Utils.topbidplayer.get("top")) + " &eCoins ◈"));
+                        });
+                        Utils.topbidplayer.clear();
+                        executeNextLevel();
+                    }
                 } else if (Utils.timerstatus.get("status")){
                     antimerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
                     antimerarmor.setCustomNameVisible(true);
