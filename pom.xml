@@ -66,11 +66,6 @@
             <id>everything</id>
             <url>http://repo.citizensnpcs.co/</url>
         </repository>
-        <repository>
-            <id>sb-core</id>
-            <name>SB Core</name>
-            <url>http://158.58.189.135:8081/repository/maven-releases/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -94,6 +89,8 @@
             <groupId>me.muffinplayz</groupId>
             <artifactId>sb-core</artifactId>
             <version>0.0.11</version>
+            <systemPath>C:/Users/Amirrezab/Desktop/server/plugins/SBCore.jar</systemPath>
+            <scope>system</scope>
         </dependency>
     </dependencies>
 </project>
