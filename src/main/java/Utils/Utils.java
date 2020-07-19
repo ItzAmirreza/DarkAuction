@@ -5,9 +5,7 @@ import me.mattstudios.mfgui.gui.guis.Gui;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,12 +37,6 @@ public class Utils {
 
     public static List<ItemStack> auctionitems = new ArrayList<>();
 
-    public static ArmorStand antimerstand;
-
-    public static ArmorStand anarmorstand;
-
-    public static Gui gui = new Gui(SBDarkAuction.getInstance(), 6, "&6Bid Page");
-
     public static ItemStack itemRightNow;
 
     public static HashMap<String, Boolean> timerstatus = new HashMap<>();
@@ -53,10 +45,6 @@ public class Utils {
 
     public static HashMap<String, Location> inauction = new HashMap<>();
 
-    public static HashMap<String, Integer> topbid = new HashMap<>();
 
-    public static HashMap<String, String> topbidplayer = new HashMap<>();
-
-    public static me.muffinplayz.sbcore.Main sbCore = (me.muffinplayz.sbcore.Main) Bukkit.getServer().getPluginManager().getPlugin("SBCore");
 
 }
