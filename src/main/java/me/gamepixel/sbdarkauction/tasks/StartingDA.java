@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class StartingDA {
 
-    private ArmorStand anarmorstand;
+    private ArmorStand anarmorstand = Utils.anarmorstand;
     private ArmorStand antimerarmor = Utils.antimerstand;
     private List<Player> playersinauction = new ArrayList<>();
     private Item anitem;
@@ -155,6 +155,7 @@ public class StartingDA {
         Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
+
                 ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
                 armorStand.setVisible(false);
                 armorStand.setArms(false);

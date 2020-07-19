@@ -41,6 +41,8 @@ public class Utils {
 
     public static ArmorStand antimerstand;
 
+    public static ArmorStand anarmorstand;
+
     public static Gui gui = new Gui(SBDarkAuction.getInstance(), 6, "&6Bid Page");
 
     public static ItemStack itemRightNow;
