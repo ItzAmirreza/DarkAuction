@@ -40,6 +40,12 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <relocation>
+                                    <pattern>me.mattstudios.mfgui</pattern>
+                                    <shadedPattern>me.gamepixel.sbdarkauction.SBDarkAuction.mfgui</shadedPattern> <!-- Replace package here here -->
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -70,6 +76,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>me.mattstudios.utils</groupId>
+            <artifactId>matt-framework-gui</artifactId>
+            <version>1.2.8</version> <!-- replace version here -->
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
@@ -79,18 +90,6 @@
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
             <version>2.0.27-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>fr.minuskube.inv</groupId>
-            <artifactId>smart-invs</artifactId>
-            <version>1.2.7</version>
-        </dependency>
-        <dependency>
-            <groupId>me.muffinplayz</groupId>
-            <artifactId>sb-core</artifactId>
-            <version>0.0.11</version>
-            <systemPath>C:/Users/Amirrezab/Desktop/server/plugins/SBCore.jar</systemPath>
-            <scope>system</scope>
         </dependency>
     </dependencies>
 </project>

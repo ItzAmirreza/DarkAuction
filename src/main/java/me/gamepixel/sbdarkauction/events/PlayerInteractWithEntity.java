@@ -1,6 +1,8 @@
 package me.gamepixel.sbdarkauction.events;
 
 import Utils.Utils;
+import me.gamepixel.sbdarkauction.guilist.FirstGui;
+import me.gamepixel.sbdarkauction.tasks.StartingDA;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
@@ -14,18 +16,15 @@ public class PlayerInteractWithEntity implements Listener {
     @EventHandler
     public void interactionEvent(PlayerInteractAtEntityEvent e) {
 
-        e.getRightClicked().sendMessage("lvl 1");
         System.out.println("lvl 1");
         if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 
-            e.getRightClicked().sendMessage("lvl 2");
             System.out.println("lvl 2");
             ArmorStand stand = (ArmorStand) e.getRightClicked();
-            if (stand == Utils.anarmorstand) {
+            if (stand == StartingDA.anarmorstand || stand == StartingDA.antimerarmor) {
                 e.setCancelled(true);
-                e.getRightClicked().sendMessage("lvl 3");
                 System.out.println("lvl 3");
-                Utils.gui.open(e.getPlayer());
+                FirstGui.gui.open(e.getPlayer());
 
             }
 
@@ -37,18 +36,15 @@ public class PlayerInteractWithEntity implements Listener {
     @EventHandler
     public void interactionEvent2(PlayerInteractEntityEvent e) {
 
-        e.getRightClicked().sendMessage("lvl 1");
         System.out.println("lvl 1");
         if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 
-            e.getRightClicked().sendMessage("lvl 2");
             System.out.println("lvl 2");
             ArmorStand stand = (ArmorStand) e.getRightClicked();
-            if (stand == Utils.anarmorstand) {
+            if (stand == StartingDA.anarmorstand || stand == StartingDA.antimerarmor) {
                 e.setCancelled(true);
-                e.getRightClicked().sendMessage("lvl 3");
                 System.out.println("lvl 3");
-                Utils.gui.open(e.getPlayer());
+                FirstGui.gui.open(e.getPlayer());
 
             }
 
@@ -60,7 +56,7 @@ public class PlayerInteractWithEntity implements Listener {
     @EventHandler
     public void equiptingarmor(PlayerArmorStandManipulateEvent e) {
 
-        if (e.getRightClicked() == Utils.anarmorstand || e.getRightClicked() == Utils.antimerstand) {
+        if (e.getRightClicked() == StartingDA.anarmorstand || e.getRightClicked() == StartingDA.antimerarmor) {
 
             e.setCancelled(true);
         }

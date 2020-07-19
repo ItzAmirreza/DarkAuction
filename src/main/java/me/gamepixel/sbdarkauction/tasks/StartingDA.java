@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -18,12 +19,12 @@ import java.util.Random;
 
 public class StartingDA {
 
-    private ArmorStand anarmorstand = Utils.anarmorstand;
-    private ArmorStand antimerarmor = Utils.antimerstand;
-    private List<Player> playersinauction = new ArrayList<>();
+    public static ArmorStand anarmorstand;
+    public static ArmorStand antimerarmor;
+    private final List<Player> playersinauction = new ArrayList<>();
     private Item anitem;
     public static int countnum = 10;
-    private int countdown = 0;
+    private final int countdown = 0;
 
     NPC EntranceNpc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     public void entrancenpcspawn() {
@@ -151,56 +152,46 @@ public class StartingDA {
     }
 
     public void spawnArmorStand(Location location, Item item) {
-
+        FirstGui.makeguipage();
         Bukkit.getScheduler().scheduleSyncDelayedTask(SBDarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
 
-                ArmorStand armorStand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
-                armorStand.setVisible(false);
-                armorStand.setArms(false);
-                armorStand.setGravity(false);
+                anarmorstand = (ArmorStand) location.getWorld().spawnEntity(location, EntityType.ARMOR_STAND);
+                anarmorstand.setVisible(false);
+                anarmorstand.setArms(false);
+                anarmorstand.setGravity(false);
                 String itemlore = item.getItemStack().getItemMeta().getDisplayName();
-                if (item.getItemStack().getItemMeta().hasLore()) {
-                    for (String i : item.getItemStack().getItemMeta().getLore()) {
-                        itemlore = itemlore + "\n " + i;
-
-                    }
-                }
-
-                armorStand.setCustomName(Utils.color(itemlore));
-                armorStand.setCustomNameVisible(true);
-                startCountDown(armorStand, item);
+                anarmorstand.setCustomName(Utils.color(itemlore));
+                anarmorstand.setCustomNameVisible(true);
+                startCountDown(item);
             }
         }, 20 * 3);
 
     }
 
 
-    public void startCountDown(ArmorStand armorStand, Item item) {
+    public void startCountDown(Item item) {
 
-        anarmorstand = armorStand;
         anitem = item;
         if (Utils.timerstatus.containsKey("status")) {
 
-            Location newloc = new Location(armorStand.getWorld(), armorStand.getLocation().getX(), armorStand.getLocation().getY() - 1, armorStand.getLocation().getZ());
+            Location newloc = new Location(anarmorstand.getWorld(), anarmorstand.getLocation().getX(), anarmorstand.getLocation().getY() - 1, anarmorstand.getLocation().getZ());
 
-            ArmorStand timerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
-            timerarmor.setVisible(false);
-            timerarmor.setArms(false);
-            timerarmor.setGravity(false);
-            antimerarmor = timerarmor;
+            antimerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
+            antimerarmor.setVisible(false);
+            antimerarmor.setArms(false);
+            antimerarmor.setGravity(false);
             Utils.timerstatus.replace("status", true);
 
         } else {
 
-            Location newloc = new Location(armorStand.getWorld(), armorStand.getLocation().getX(), armorStand.getLocation().getY() - 1, armorStand.getLocation().getZ());
+            Location newloc = new Location(anarmorstand.getWorld(), anarmorstand.getLocation().getX(), anarmorstand.getLocation().getY() - 1, anarmorstand.getLocation().getZ());
 
-            ArmorStand timerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
-            timerarmor.setVisible(false);
-            timerarmor.setArms(false);
-            timerarmor.setGravity(false);
-            antimerarmor = timerarmor;
+            antimerarmor = (ArmorStand) newloc.getWorld().spawnEntity(newloc, EntityType.ARMOR_STAND);
+            antimerarmor.setVisible(false);
+            antimerarmor.setArms(false);
+            antimerarmor.setGravity(false);
             Utils.timerstatus.put("status", true);
             startTimerTask();
 
@@ -223,20 +214,20 @@ public class StartingDA {
                     anitem.remove();
                     countnum = 10;
                     Utils.timerstatus.replace("status", false);
-                    if (Utils.topbidplayer.isEmpty()) {
+                    if (FirstGui.topbidplayer.isEmpty()) {
                         playersinauction.forEach(player -> {
-                            Utils.gui.close(player);
+                            FirstGui.gui.close(player);
                             player.sendMessage(Utils.color("&7No one has bidded for this item... Poor item..."));
                         });
                         executeNextLevel();
                     } else {
-                        Player player = Bukkit.getPlayer(Utils.topbidplayer.get("top"));
+                        Player player = Bukkit.getPlayer(FirstGui.topbidplayer.get("top"));
                         player.getInventory().addItem(anitem.getItemStack());
                         playersinauction.forEach(player1 -> {
-                            Utils.gui.close(player1);
-                            player1.sendMessage(Utils.color("&e&l" + Utils.topbidplayer.get("top") + " &7Won the item for " + "&e" + Utils.topbidplayer.get(Utils.topbidplayer.get("top")) + " &eCoins ◈"));
+                            FirstGui.gui.close(player1);
+                            player1.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
                         });
-                        Utils.topbidplayer.clear();
+                        FirstGui.topbidplayer.clear();
                         executeNextLevel();
                     }
                 } else if (Utils.timerstatus.get("status")){

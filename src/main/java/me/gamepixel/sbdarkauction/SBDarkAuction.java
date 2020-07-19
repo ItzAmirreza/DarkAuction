@@ -2,8 +2,6 @@ package me.gamepixel.sbdarkauction;
 import Utils.Utils;
 import me.gamepixel.sbdarkauction.commands.DarkAuctionCommand;
 import me.gamepixel.sbdarkauction.events.PlayerInteractWithEntity;
-import me.gamepixel.sbdarkauction.tasks.StartingDA;
-import me.muffinplayz.sbcore.listeners.PlayerDamage;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SBDarkAuction extends JavaPlugin {
