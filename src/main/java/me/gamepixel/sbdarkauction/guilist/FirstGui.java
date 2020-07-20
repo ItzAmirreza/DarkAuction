@@ -282,9 +282,7 @@ public class FirstGui {
         GuiItem skull = new GuiItem(head);
         return skull;
     }
-
-
-    ///////When player clicks on any one the biding slots...
+    
 
 
 }
