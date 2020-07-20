@@ -5,8 +5,9 @@ import me.gamepixel.sbdarkauction.SBDarkAuction;
 import me.gamepixel.sbdarkauction.tasks.StartingDA;
 import me.mattstudios.mfgui.gui.guis.Gui;
 import me.mattstudios.mfgui.gui.guis.GuiItem;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -58,14 +59,34 @@ public class FirstGui {
 
                     event.setCancelled(true);
                     event.getWhoClicked().sendMessage(Utils.color("&cThere is a bid higher than this amount!"));
+                    Player player = (Player) event.getWhoClicked();
+                    player.playNote(player.getLocation(), Instrument.BASS_DRUM, Note.natural(1, Note.Tone.E));
 
                 } else if (event.getCurrentItem().getType() == Material.GOLD_NUGGET) {
                     event.setCancelled(true);
-                    topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
-                    topbidplayer.put("top", event.getWhoClicked().getName());
-                    gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
-                    StartingDA.countnum = 10;
-                    ChangeToBarrierSlot(findPreviousBids(findRightAmount(i)));
+                    if (topbidplayer.get("top") == null || !topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
+                        topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
+                        int biddedamount = Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", ""));
+                        topbidplayer.put("top", event.getWhoClicked().getName());
+                        gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
+                        StartingDA.countnum = 10;
+                        Player player = (Player) event.getWhoClicked();
+                        StartingDA.spawnBiddingHolo(biddedamount, player.getName());
+                        player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
+                        ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
+                        for (Player player1 : StartingDA.playersinauction) {
+
+                            player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
+                            player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
+
+                        }
+                    } else if (topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
+                        Player player = (Player) event.getWhoClicked();
+                        player.sendMessage(Utils.color("&cYou are already the top bidder!"));
+                        player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1.0F, 2.0F);
+
+                    }
+
                 }
 
             });
@@ -74,6 +95,8 @@ public class FirstGui {
             // Handle your default action here
             event.setCancelled(true);
         });
+
+        gui.getFiller().fill(redstainedglass);
         
     }
 
@@ -97,19 +120,18 @@ public class FirstGui {
 
     }
 
-    public static List<Integer> findPreviousBids(int num) {
-
+    public static List<Integer> findPreviousBids(int num, Player player) {
+        ItemStack playerhead = getPlayerHead(player.getName(), num).getItemStack();
         List<Integer> barrierslots = new ArrayList<>();
         for (int i : biddingItemsSlot()) {
+            if (gui.getGuiItem(i).getItemStack().getType() == Material.GOLD_NUGGET || gui.getGuiItem(i).getItemStack() == playerhead) {
+                int rightamount = findRightAmount(i);
+                if (rightamount < num) {
 
-            int rightamount = findRightAmount(i);
-            if (rightamount < num) {
+                    barrierslots.add(i);
 
-                barrierslots.add(i);
-
+                }
             }
-
-
         }
 
         return barrierslots;
@@ -216,47 +238,6 @@ public class FirstGui {
     }
 
 
-    public List<Integer> zojnumbers() {
-        int num = 0;
-        List<Integer> outgoinglist = new ArrayList<>();
-        while (num < 54) {
-            if (num%2 == 0 && num != 36 && num != 44) {
-                outgoinglist.add(num);                
-            }
-            num++;
-        }
-        
-        return outgoinglist;
-    }
-
-    public List<Integer> fardnumbers() {
-        int num = 0;
-        List<Integer> outgoinglist = new ArrayList<>();
-        while (num < 54) {
-            if (num%2 != 0) {
-                outgoinglist.add(num);
-            }
-            num++;
-        }
-
-        return outgoinglist;
-    }
-    
-    public void fillTheBorder() {
-        
-        for (int i : zojnumbers()) {
-
-            gui.setItem(i, graystainedglass);
-
-            
-        }
-        for (int i : fardnumbers()) {
-
-            gui.setItem(i, redstainedglass);
-
-        }
-
-    }
 //10-11-12-14-15-16-19-21-23-25-28-30-32-34-36-37-39-40-41-43-44
     public static List<Integer> biddingItemsSlot() {
         List<Integer> ints = new ArrayList<>();
@@ -285,14 +266,19 @@ public class FirstGui {
         return ints;
     }
 
-    public static GuiItem getPlayerHead(String name, int amount) {
-
-        ItemStack head = new ItemStack(Material.SKULL_ITEM, amount);
+    public static GuiItem getPlayerHead(String name, int amountslot) {
+        int initialamount = 0;
+        int amount = 0;
+        while (initialamount != amountslot) {
+            amount = amount + 150;
+            initialamount++;
+        }
+        ItemStack head = new ItemStack(Material.SKULL_ITEM, amountslot);
         head.setDurability((short) 3);
         SkullMeta meta = (SkullMeta) head.getItemMeta();
         meta.setOwner(name);
+        meta.setDisplayName(Utils.color("&d&l" + name + " &dBidded&e " + Integer.toString(amount) + " Coins ◈"));
         head.setItemMeta(meta);
-
         GuiItem skull = new GuiItem(head);
         return skull;
     }

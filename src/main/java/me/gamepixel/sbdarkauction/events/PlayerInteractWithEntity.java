@@ -16,14 +16,11 @@ public class PlayerInteractWithEntity implements Listener {
     @EventHandler
     public void interactionEvent(PlayerInteractAtEntityEvent e) {
 
-        System.out.println("lvl 1");
         if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 
-            System.out.println("lvl 2");
             ArmorStand stand = (ArmorStand) e.getRightClicked();
             if (stand == StartingDA.anarmorstand || stand == StartingDA.antimerarmor) {
                 e.setCancelled(true);
-                System.out.println("lvl 3");
                 FirstGui.gui.open(e.getPlayer());
 
             }
@@ -36,14 +33,11 @@ public class PlayerInteractWithEntity implements Listener {
     @EventHandler
     public void interactionEvent2(PlayerInteractEntityEvent e) {
 
-        System.out.println("lvl 1");
         if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 
-            System.out.println("lvl 2");
             ArmorStand stand = (ArmorStand) e.getRightClicked();
             if (stand == StartingDA.anarmorstand || stand == StartingDA.antimerarmor) {
                 e.setCancelled(true);
-                System.out.println("lvl 3");
                 FirstGui.gui.open(e.getPlayer());
 
             }
