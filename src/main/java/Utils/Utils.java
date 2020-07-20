@@ -39,6 +39,8 @@ public class Utils {
 
     public static ItemStack itemRightNow;
 
+    public static HashMap<String, Integer> guiphase = new HashMap<>();
+
     public static HashMap<String, Boolean> timerstatus = new HashMap<>();
 
     public static HashMap<String, Integer> auctionlevel = new HashMap<>();
