@@ -2,7 +2,7 @@ name: SBDarkAuction
 version: ${project.version}
 main: me.gamepixel.sbdarkauction.SBDarkAuction
 api-version: 1.12
-authors: [Dead_Light, MuffinPlayz]
+authors: [Dead_Light]
 description: Hypixel Dark Auction premade for Gamepixel
 depend: [Citizens]
 commands:

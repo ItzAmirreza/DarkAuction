@@ -44,17 +44,14 @@ public class DarkAuctionCommand implements CommandExecutor {
 
                     } else if (args[0].equalsIgnoreCase("additem")) {
 
-                        //soon //soon //soon <--- Under Development (Needs Item System API)
-
-                        //test
                         try {
                             ItemStack item = player.getInventory().getItemInMainHand();
-                            if (item != null) {
+                            if (item != null && !Utils.auctionitems.contains(item)) {
                                 Utils.auctionitems.add(item);
                                 player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
 
                             } else {
-                                player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand!"));
+                                player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand or item already added once!"));
 
                             }
 
@@ -74,26 +71,31 @@ public class DarkAuctionCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("entrancenpc")) {
                         //da entrancenpc
 
-                        SBDarkAuction.getInstance().getConfig().set("entrance-npc-coordinates", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName()));
+                        SBDarkAuction.getInstance().getConfig().set("entrance-npc-coordinates", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aEntrance Npc Has Successfully set."));
                         SBDarkAuction.getInstance().saveConfig();
                     } else if (args[0].equalsIgnoreCase("teleportloc")) {
 
                         //da teleportloc
-                        SBDarkAuction.getInstance().getConfig().set("teleport-at-start", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName()));
+                        SBDarkAuction.getInstance().getConfig().set("teleport-at-start", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aTeleport Location Has Successfully set."));
                         SBDarkAuction.getInstance().saveConfig();
                     } else if (args[0].equalsIgnoreCase("itemshowcase")) {
                         //da itemshowcase
-                        SBDarkAuction.getInstance().getConfig().set("itemshowcase", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName()));
+                        SBDarkAuction.getInstance().getConfig().set("itemshowcase", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aItem Showcase Has Successfully set."));
                         SBDarkAuction.getInstance().saveConfig();
 
-                    } else if (args[0].equalsIgnoreCase("test")) {
+                    } else if (args[0].equalsIgnoreCase("start")) {
                         //test part - will get removed after main release
+                        if (Utils.auctionitems.size() >= 3) {
+                            da.entrancenpcspawn();
+                            player.sendMessage(Utils.color("&aAuction has started!"));
 
-                        da.entrancenpcspawn();
+                        } else {
 
+                            player.sendMessage(Utils.color("&aYou need at least 3 items added to start the auction."));
+                        }
                     }
                     else {
 
@@ -105,7 +107,7 @@ public class DarkAuctionCommand implements CommandExecutor {
 
             } else {
 
-                player.sendMessage(Utils.color(Utils.prefix + "&7 Developed By Dead_Light & MuffinPlayz"));
+                player.sendMessage(Utils.color(Utils.prefix + "&7 Developed By Dead_Light"));
 
             }
 
@@ -121,7 +123,7 @@ public class DarkAuctionCommand implements CommandExecutor {
     }
 
     public String showhelppage() {
-        String help = Utils.prefix + "&cUse Correct Command Usage: \n &7 /da setup \n &7/da additem (Will add the item that you are holding to the next Auction) \n /da reload";
+        String help = Utils.prefix + "&cUse Correct Command Usage: \n &7 /da setup \n &7/da additem (Will add the item that you are holding to the next Auction) \n /da reload \n &7/da start - Starting the DarkAuction";
         return help;
     }
 

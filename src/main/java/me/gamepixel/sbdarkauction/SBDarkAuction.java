@@ -2,6 +2,7 @@ package me.gamepixel.sbdarkauction;
 import Utils.Utils;
 import me.gamepixel.sbdarkauction.commands.DarkAuctionCommand;
 import me.gamepixel.sbdarkauction.events.PlayerInteractWithEntity;
+import me.gamepixel.sbdarkauction.tasks.StartingDA;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SBDarkAuction extends JavaPlugin {
@@ -34,5 +35,6 @@ public final class SBDarkAuction extends JavaPlugin {
 
 
         getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cPlugin Has Been Disabled."));
+        StartingDA.EntranceNpc.despawn();
     }
 }
