@@ -8,8 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import javax.rmi.CORBA.Util;
-
 
 public class DarkAuctionCommand implements CommandExecutor {
 

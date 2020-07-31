@@ -4,7 +4,7 @@ main: me.gamepixel.sbdarkauction.SBDarkAuction
 api-version: 1.12
 authors: [Dead_Light]
 description: Hypixel Dark Auction premade for Gamepixel
-depend: [Citizens]
+depend: [Citizens, Vault]
 commands:
   da:
     description: the main command which is used for server admin
