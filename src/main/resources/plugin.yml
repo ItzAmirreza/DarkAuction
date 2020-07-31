@@ -1,9 +1,9 @@
-name: SBDarkAuction
+name: DarkAuction
 version: ${project.version}
-main: me.gamepixel.sbdarkauction.SBDarkAuction
-api-version: 1.12
+main: me.deadlight.darkauction.DarkAuction
+api-version: 1.13
 authors: [Dead_Light]
-description: Hypixel Dark Auction premade for Gamepixel
+description: Hypixel Dark Auction remade
 depend: [Citizens, Vault]
 commands:
   da:
