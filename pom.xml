@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.gamepixel</groupId>
-    <artifactId>SBDarkAuction</artifactId>
+    <groupId>me.deadlight</groupId>
+    <artifactId>DarkAuction</artifactId>
     <version>1.0</version>
     <packaging>jar</packaging>
 
-    <name>SBDarkAuction</name>
+    <name>DarkAuction</name>
 
-    <description>Hypixel Dark Auction premade for Gamepixel</description>
+    <description>Hypixel DarkAuction plugin remade</description>
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -43,7 +43,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>me.mattstudios.mfgui</pattern>
-                                    <shadedPattern>me.gamepixel.sbdarkauction.SBDarkAuction.mfgui</shadedPattern> <!-- Replace package here here -->
+                                    <shadedPattern>me.deadlight.darkauction.DarkAuction.mfgui</shadedPattern> <!-- Replace package here here -->
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -87,7 +87,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -100,6 +100,7 @@
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>Vault</artifactId>
             <version>1.7.2</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

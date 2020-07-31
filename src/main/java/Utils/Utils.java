@@ -1,13 +1,12 @@
 package Utils;
 
-import me.gamepixel.sbdarkauction.SBDarkAuction;
+import me.deadlight.darkauction.DarkAuction;
 import me.mattstudios.mfgui.gui.guis.Gui;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -47,6 +46,15 @@ public class Utils {
 
     public static HashMap<String, Location> inauction = new HashMap<>();
 
+
+    public static boolean isNewVersion() {
+
+        return Arrays.stream(Material.values())
+                .map(Material::name).collect(Collectors.toList()).contains("PLAYER_HEAD");
+    }
+
+
+    public static Sound stal = Sound.valueOf(isNewVersion() ? "MUSIC_DISC_STAL" : "RECORD_STAL");
 
 
 }
