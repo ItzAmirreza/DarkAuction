@@ -3,6 +3,8 @@ import Utils.Utils;
 import me.gamepixel.sbdarkauction.commands.DarkAuctionCommand;
 import me.gamepixel.sbdarkauction.events.PlayerInteractWithEntity;
 import me.gamepixel.sbdarkauction.tasks.StartingDA;
+import net.milkbowl.vault.economy.Economy;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class SBDarkAuction extends JavaPlugin {
@@ -13,6 +15,7 @@ public final class SBDarkAuction extends JavaPlugin {
         return instance;
     }
 
+    public Economy eco;
 
     @Override
     public void onEnable() {
@@ -22,7 +25,13 @@ public final class SBDarkAuction extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerInteractWithEntity(), this);
 
         if (getServer().getPluginManager().getPlugin("Citizens") != null) {
-            getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&aPlugin Has Been Enabled."));
+            if (setupEconomy()) {
+                getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&aPlugin Has Been Enabled."));
+            } else {
+
+                getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cThis plugin requires Vault Plugin."));
+                getServer().getPluginManager().disablePlugin(this);
+            }
         } else {
             getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cThis plugin requires Citizens Plugin."));
             getServer().getPluginManager().disablePlugin(this);
@@ -36,5 +45,20 @@ public final class SBDarkAuction extends JavaPlugin {
 
         getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cPlugin Has Been Disabled."));
         StartingDA.EntranceNpc.despawn();
+    }
+
+
+
+    private boolean setupEconomy() {
+
+        RegisteredServiceProvider<Economy> economy = getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+
+        if (economy != null) {
+
+            eco = economy.getProvider();
+
+
+        }
+        return (eco != null);
     }
 }

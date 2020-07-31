@@ -103,7 +103,7 @@ public class StartingDA {
                 Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
                 for (Player player : playersinauction) {
 
-                    player.playSound(location, Sound.RECORD_STAL, 1.0F, 1.5F);
+                    player.playSound(location, Sound.RECORD_STAL, 1.0F, 1.0F);
 
                 }
                 startFirstItem(Utils.auctionitems);
@@ -302,6 +302,7 @@ public class StartingDA {
                     } else {
                         Player player = Bukkit.getPlayer(FirstGui.topbidplayer.get("top"));
                         player.getInventory().addItem(anitem.getItemStack());
+                        Utils.guiphase.put("phase", 1);
                         playersinauction.forEach(player1 -> {
                             FirstGui.gui.close(player1);
                             player1.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
@@ -310,6 +311,7 @@ public class StartingDA {
                         executeNextLevel();
                     }
                 } else if (Utils.timerstatus.get("status")){
+
                     topbidarmor.setCustomNameVisible(true);
                     antimerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
                     antimerarmor.setCustomNameVisible(true);
@@ -366,6 +368,7 @@ public class StartingDA {
         listofauctioneditems.clear();
         EntranceNpc.despawn();
         EntranceNpc.destroy();
+        Utils.guiphase.put("phase", 1);
         Location location = Utils.convertStringToLoc(SBDarkAuction.getInstance().getConfig().getString("itemshowcase"));
         playersinauction.forEach(player -> {
             player.stopSound(Sound.RECORD_STAL);
