@@ -1,6 +1,6 @@
 package me.deadlight.darkauction.tasks;
 
-import Utils.Utils;
+import Utils.*;
 import me.deadlight.darkauction.DarkAuction;
 import me.deadlight.darkauction.guilist.FirstGui;
 import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
@@ -24,14 +24,14 @@ import java.util.Random;
 public class StartingDA {
 
     public static int requiredmoney = Utils.config.getInt("money-required-to-enter");
-    public static List<ItemStack> listofauctioneditems = new ArrayList<>();
+    public static List<DAItem> listofauctioneditems = new ArrayList<>();
     public Random random = new Random();
     public static ArmorStand anarmorstand;
     public static ArmorStand antimerarmor;
     public static ArmorStand topbidarmor;
     public static List<Player> playersinauction = new ArrayList<>();
-    private Item anitem;
-    public static int countnum = 10;
+    private DAItem anitem;
+    public static int countnum = 15;
     private final int countdown = 0;
     public static NPC EntranceNpc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     public void entrancenpcspawn() {
@@ -135,7 +135,7 @@ public class StartingDA {
 
 
     //first item auction
-    public void startFirstItem(List<ItemStack> items) {
+    public void startFirstItem(List<DAItem> items) {
 
         if (items.size() == 0) {
 
@@ -145,17 +145,18 @@ public class StartingDA {
 
 
 
-            ItemStack itemst = items.get(random.nextInt(items.size()));
+            DAItem itemst = items.get(random.nextInt(items.size()));
             listofauctioneditems.add(itemst);
             Utils.itemRightNow = itemst;
             Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-            Item item = location.getWorld().dropItem(location, itemst);
+            Item item = location.getWorld().dropItem(location, itemst.getItemStack());
             item.setVelocity(new Vector());
             item.setPickupDelay(32767);
             item.setInvulnerable(true);
             item.setGravity(false);
+            Utils.itemRightNow.setItem(item);
             Utils.auctionlevel.put("level", 1);
-            spawnArmorStand(location, item);
+            spawnArmorStand(location, item, itemst);
 
 
 
@@ -165,11 +166,11 @@ public class StartingDA {
 
     //second item auction
     public void startSecondItem() {
-        List<ItemStack> items = Utils.auctionitems;
+        List<DAItem> items = Utils.auctionitems;
         boolean again = true;
-        ItemStack itemstt = items.get(random.nextInt(items.size()));
+        DAItem itemstt = items.get(random.nextInt(items.size()));
         while (again) {
-            ItemStack itemst = items.get(random.nextInt(items.size()));
+            DAItem itemst = items.get(random.nextInt(items.size()));
             if (!listofauctioneditems.contains(itemst)) {
 
                 itemstt = itemst;
@@ -181,24 +182,25 @@ public class StartingDA {
         Utils.itemRightNow = itemstt;
         Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
 
-        Item item = location.getWorld().dropItem(location, itemstt);
+        Item item = location.getWorld().dropItem(location, itemstt.getItemStack());
         item.setVelocity(new Vector());
         item.setPickupDelay(32767);
         item.setInvulnerable(true);
         item.setGravity(false);
+        Utils.itemRightNow.setItem(item);
         Utils.auctionlevel.replace("level", 2);
-        spawnArmorStand(location, item);
+        spawnArmorStand(location, item, itemstt);
 
 
     }
 
     public void startThirdItem() {
 
-        List<ItemStack> items = Utils.auctionitems;
+        List<DAItem> items = Utils.auctionitems;
         boolean again = true;
-        ItemStack itemstt = items.get(random.nextInt(items.size()));
+        DAItem itemstt = items.get(random.nextInt(items.size()));
         while (again) {
-            ItemStack itemst = items.get(random.nextInt(items.size()));
+            DAItem itemst = items.get(random.nextInt(items.size()));
             if (!listofauctioneditems.contains(itemst)) {
 
                 itemstt = itemst;
@@ -210,16 +212,17 @@ public class StartingDA {
         Utils.itemRightNow = itemstt;
         Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
 
-        Item item = location.getWorld().dropItem(location, itemstt);
+        Item item = location.getWorld().dropItem(location, itemstt.getItemStack());
         item.setVelocity(new Vector());
         item.setPickupDelay(32767);
         item.setInvulnerable(true);
         item.setGravity(false);
+        Utils.itemRightNow.setItem(item);
         Utils.auctionlevel.replace("level", 3);
-        spawnArmorStand(location, item);
+        spawnArmorStand(location, item, itemstt);
     }
 
-    public void spawnArmorStand(Location location, Item item) {
+    public void spawnArmorStand(Location location, Item item, DAItem daItem) {
         FirstGui.makeguipage();
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
@@ -229,7 +232,7 @@ public class StartingDA {
                 anarmorstand.setVisible(false);
                 anarmorstand.setArms(false);
                 anarmorstand.setGravity(false);
-                if (!item.getItemStack().getItemMeta().hasDisplayName()) {
+                if (!daItem.getItemStack().getItemMeta().hasDisplayName()) {
 
                     String itemlore = item.getItemStack().getType().name();
                     anarmorstand.setCustomName(Utils.color("&a&l" + itemlore));
@@ -245,15 +248,17 @@ public class StartingDA {
                 }
 
 
+
             }
         }, 20 * 3);
+
 
     }
 
 
     public void startCountDown(Item item) {
 
-        anitem = item;
+        anitem = Utils.itemRightNow;
         if (Utils.timerstatus.containsKey("status")) {
 
             Location newloc = new Location(anarmorstand.getWorld(), anarmorstand.getLocation().getX(), anarmorstand.getLocation().getY() - 1, anarmorstand.getLocation().getZ());
@@ -308,7 +313,7 @@ public class StartingDA {
                     anarmorstand.remove();
                     antimerarmor.remove();
                     topbidarmor.remove();
-                    anitem.remove();
+                    anitem.getItem().remove();
                     countnum = 10;
 
                     Utils.timerstatus.replace("status", false);

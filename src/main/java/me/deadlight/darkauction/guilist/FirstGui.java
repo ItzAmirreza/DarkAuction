@@ -34,6 +34,7 @@ public class FirstGui {
     public static HashMap<String, String> topbidplayer = new HashMap<>();
 
 
+
     public static void makeguipage() {
 
         if (!Utils.guiphase.containsKey("phase")) {
@@ -42,7 +43,7 @@ public class FirstGui {
 
         }
 
-        GuiItem sellingitem = new GuiItem(Utils.itemRightNow);
+        GuiItem sellingitem = new GuiItem(Utils.itemRightNow.getItemStack());
         //setting the main item which is going to be sold
         gui.setItem(22, sellingitem);
         //borders
@@ -104,6 +105,7 @@ public class FirstGui {
                     event.setCancelled(true);
                     if (topbidplayer.get("top") == null || !topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
                         int biddedamount = Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", ""));
+
                         Player player = (Player) event.getWhoClicked();
                         if (isNextPageBid(event.getCurrentItem().getAmount())) {
 
@@ -385,14 +387,14 @@ public class FirstGui {
 
 
     public static int findRightPrice(int slot) {
-
         int initialamount = 0;
-        int amount = 0;
+        int price = Utils.itemRightNow.getPrice();
         while (initialamount != findRightAmount(slot)) {
-            amount = amount + 150;
+            price = price + 150;
             initialamount++;
         }
-        return amount;
+
+        return price;
     }
 
 }

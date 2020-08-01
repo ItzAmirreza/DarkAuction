@@ -1,6 +1,5 @@
 package me.deadlight.darkauction.commands;
 import Utils.*;
-import me.deadlight.darkauction.DarkAuction;
 import me.deadlight.darkauction.tasks.StartingDA;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -41,21 +40,36 @@ public class DarkAuctionCommand implements CommandExecutor {
 
 
                     } else if (args[0].equalsIgnoreCase("additem")) {
+                        if (args.length >= 2) {
 
-                        try {
-                            ItemStack item = player.getInventory().getItemInMainHand();
-                            if (item != null && !Utils.auctionitems.contains(item)) {
-                                Utils.auctionitems.add(item);
-                                player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
+                            try {
+                                int price = Integer.parseInt(args[1]);
+                                try {
+                                    DAItem item = new DAItem(player.getInventory().getItemInMainHand(), price);
+                                    if (item.getItemStack() != null && !Utils.auctionitems.contains(item)) {
+                                        Utils.auctionitems.add(item);
+                                        player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
 
-                            } else {
-                                player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand or item already added once!"));
+                                    } else {
+                                        player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand or item already added once!"));
+
+                                    }
+
+                                } catch (Exception ex) {
+
+                                    player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand!"));
+
+                                }
+                            } catch (NumberFormatException exception) {
+
+                                player.sendMessage(Utils.color(Utils.prefix + "&cPlease put a number for the price."));
 
                             }
 
-                        } catch (Exception ex) {
 
-                            player.sendMessage(Utils.color(Utils.prefix + "&cYou do not have any item in you hand!"));
+                        } else {
+
+                            player.sendMessage(Utils.color(Utils.prefix + "&6You are missing an argument! &c/da additem price"));
 
                         }
 

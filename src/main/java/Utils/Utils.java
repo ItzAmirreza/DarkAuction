@@ -34,9 +34,9 @@ public class Utils {
         return new Location(Bukkit.getWorld(splited.get(3)), Integer.parseInt(splited.get(0)) + 0.5, Integer.parseInt(splited.get(1)), Integer.parseInt(splited.get(2)) + 0.5, Float.parseFloat(splited.get(5)), Float.parseFloat(splited.get(4)));
     }
 
-    public static List<ItemStack> auctionitems = new ArrayList<>();
+    public static List<DAItem> auctionitems = new ArrayList<>();
 
-    public static ItemStack itemRightNow;
+    public static DAItem itemRightNow;
 
     public static HashMap<String, Integer> guiphase = new HashMap<>();
 
