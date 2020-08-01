@@ -103,54 +103,68 @@ public class FirstGui {
                 } else if (event.getCurrentItem().getType() == Material.GOLD_NUGGET || event.getCurrentItem().getType() == Material.DIAMOND || event.getCurrentItem().getType() == Material.GOLD_INGOT || event.getCurrentItem().getType() == Material.EMERALD) {
                     event.setCancelled(true);
                     if (topbidplayer.get("top") == null || !topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
-
+                        int biddedamount = Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", ""));
+                        Player player = (Player) event.getWhoClicked();
                         if (isNextPageBid(event.getCurrentItem().getAmount())) {
 
-                            topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
-                            int biddedamount = Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", ""));
-                            topbidplayer.put("top", event.getWhoClicked().getName());
-                            gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
-                            StartingDA.countnum = 10;
-                            Player player = (Player) event.getWhoClicked();
-                            StartingDA.spawnBiddingHolo(biddedamount, player.getName());
-                            player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
-                            ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
-                            for (Player player1 : StartingDA.playersinauction) {
+                            if (Utils.hasEnoughMoney(player, biddedamount)) {
+                                Utils.takeMoney(player, biddedamount);
+                                topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
+                                topbidplayer.put("top", event.getWhoClicked().getName());
+                                gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
+                                StartingDA.countnum = 10;
+                                StartingDA.spawnBiddingHolo(biddedamount, player.getName());
+                                player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
+                                ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
+                                for (Player player1 : StartingDA.playersinauction) {
 
-                                player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
-                                player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
+                                    player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
+                                    player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
 
-                            }
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
-                                @Override
-                                public void run() {
-                                    if (!(Utils.guiphase.get("phase") + 1 > 4)) {
-                                        Utils.guiphase.put("phase", Utils.guiphase.get("phase") + 1);
-                                        makeguipage();
-                                        try {
-                                            gui.update();
-                                        } catch (Exception e) {
-                                            //do noth
+                                }
+                                Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (!(Utils.guiphase.get("phase") + 1 > 4)) {
+                                            Utils.guiphase.put("phase", Utils.guiphase.get("phase") + 1);
+                                            makeguipage();
+                                            try {
+                                                gui.update();
+                                            } catch (Exception e) {
+                                                //do noth
+                                            }
                                         }
                                     }
-                                }
-                            }, 20 * 2);
+                                }, 20 * 2);
+
+                            } else {
+
+                                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
+                                player.sendMessage(Utils.color(Utils.prefix + "&cYou don't have enough money to pay!"));
+
+                            }
                         } else {
 
-                            topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
-                            int biddedamount = Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", ""));
-                            topbidplayer.put("top", event.getWhoClicked().getName());
-                            gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
-                            StartingDA.countnum = 10;
-                            Player player = (Player) event.getWhoClicked();
-                            StartingDA.spawnBiddingHolo(biddedamount, player.getName());
-                            player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
-                            ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
-                            for (Player player1 : StartingDA.playersinauction) {
+                            if (Utils.hasEnoughMoney(player, biddedamount)) {
+                                Utils.takeMoney(player, biddedamount);
+                                topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
+                                topbidplayer.put("top", event.getWhoClicked().getName());
+                                gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
+                                StartingDA.countnum = 10;
+                                StartingDA.spawnBiddingHolo(biddedamount, player.getName());
+                                player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
+                                ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
+                                for (Player player1 : StartingDA.playersinauction) {
 
-                                player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
-                                player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
+                                    player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
+                                    player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
 
+                                }
+
+                            } else {
+
+                                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
+                                player.sendMessage(Utils.color(Utils.prefix + "&cYou don't have enough money to pay!"));
                             }
 
                         }

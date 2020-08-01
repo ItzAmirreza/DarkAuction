@@ -1,5 +1,5 @@
 package me.deadlight.darkauction.commands;
-import Utils.Utils;
+import Utils.*;
 import me.deadlight.darkauction.DarkAuction;
 import me.deadlight.darkauction.tasks.StartingDA;
 import org.bukkit.command.Command;
@@ -63,26 +63,25 @@ public class DarkAuctionCommand implements CommandExecutor {
 
                     } else if (args[0].equalsIgnoreCase("reload")) {
 
-                        DarkAuction.getInstance().reloadConfig();
+                        ConfigManager.reloadCommand();
                         player.sendMessage(Utils.color(Utils.prefix + "&7Configuration successfully reloaded!"));
 
                     } else if (args[0].equalsIgnoreCase("entrancenpc")) {
                         //da entrancenpc
-
-                        DarkAuction.getInstance().getConfig().set("entrance-npc-coordinates", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
+                        Utils.config.set("entrance-npc-coordinates", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aEntrance Npc Has Successfully set."));
-                        DarkAuction.getInstance().saveConfig();
+                        ConfigManager.reloadConfig();
                     } else if (args[0].equalsIgnoreCase("teleportloc")) {
 
                         //da teleportloc
-                        DarkAuction.getInstance().getConfig().set("teleport-at-start", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
+                        Utils.config.set("teleport-at-start", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aTeleport Location Has Successfully set."));
-                        DarkAuction.getInstance().saveConfig();
+                        ConfigManager.reloadConfig();
                     } else if (args[0].equalsIgnoreCase("itemshowcase")) {
                         //da itemshowcase
-                        DarkAuction.getInstance().getConfig().set("itemshowcase", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
+                        Utils.config.set("itemshowcase", Utils.convertLocToString(player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ(), player.getLocation().getWorld().getName(), player.getLocation().getPitch(), player.getLocation().getYaw()));
                         player.sendMessage(Utils.color(Utils.prefix + "&aItem Showcase Has Successfully set."));
-                        DarkAuction.getInstance().saveConfig();
+                        ConfigManager.reloadConfig();
 
                     } else if (args[0].equalsIgnoreCase("start")) {
                         //test part - will get removed after main release

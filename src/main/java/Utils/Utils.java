@@ -1,8 +1,8 @@
 package Utils;
-
 import me.deadlight.darkauction.DarkAuction;
-import me.mattstudios.mfgui.gui.guis.Gui;
 import org.bukkit.*;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
@@ -46,6 +46,7 @@ public class Utils {
 
     public static HashMap<String, Location> inauction = new HashMap<>();
 
+    public static HashMap<Player, Integer> biddedamount = new HashMap<>();
 
     public static boolean isNewVersion() {
 
@@ -56,5 +57,24 @@ public class Utils {
 
     public static Sound stal = Sound.valueOf(isNewVersion() ? "MUSIC_DISC_STAL" : "RECORD_STAL");
 
+
+    public static FileConfiguration config = DarkAuction.getInstance().getConfig();
+
+    public static boolean hasEnoughMoney(Player player , int amount) {
+
+        if (amount - biddedamount.get(player) > DarkAuction.getInstance().eco.getBalance(Bukkit.getOfflinePlayer(player.getUniqueId()))) {
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public static void takeMoney(Player player, int amount) {
+
+        DarkAuction.getInstance().eco.withdrawPlayer(Bukkit.getOfflinePlayer(player.getUniqueId()), amount - biddedamount.get(player));
+        biddedamount.put(player, biddedamount.get(player) + (amount - biddedamount.get(player)));
+
+    }
 
 }

@@ -17,13 +17,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.Vector;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class StartingDA {
 
+    public static int requiredmoney = Utils.config.getInt("money-required-to-enter");
     public static List<ItemStack> listofauctioneditems = new ArrayList<>();
     public Random random = new Random();
     public static ArmorStand anarmorstand;
@@ -33,11 +33,10 @@ public class StartingDA {
     private Item anitem;
     public static int countnum = 10;
     private final int countdown = 0;
-
     public static NPC EntranceNpc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "");
     public void entrancenpcspawn() {
         EntranceNpc.getTrait(SkinTrait.class).setSkinPersistent("salam", "LnO4hRXRK+aumyL2/Ck/ZVTgifEr5J6GxnRKNsXDIVDhlfcvPXsMtNeoiQUNCGWeC5I/wjMOesiO87Y2LaRaMVbcrSA2XMzvYQ4JyNN4aJqCfuUtIuYqvOFFp5mK4xUSUmOP0OP1WldzCrp/bYae/hSUaE1cfJZY/kiOorYwfb4kE1sObq6hUmqJfPXbVxEiMZosRZlQl/qhkTXiBasfDfNI/COuPz+OhZWEMr9MFWa/08Hb9slzjk7jVUFdIejJreHOMg24KBWYYermiiPRhF3DbRmKXonN1wokPwIQIbtzl5aQ3sIhmuJd+9He9joRcS+uP8DFoLngiqLJojgmzRAE4qLuKFjj4PIh64W4AnzP+kWtwsI0oUYHmqo7hCJ0zIHVZ4IZ/Itsomq+V3oOdO5gdJZB/fNmVWbNYp6SfNKyDnzaYtjVjoD/ijpWAaz43S0oF9ew42IBg9ytL1B0mnYfCjsec6BdW26rGVmaSZn5ERTKK3pT38QEv9Jh/uVFPoFtJ0YPWq6WqJhplhhSskpq82E7BExqOTf1NTLGWa3xz5bPZ5wadJBVYu+esdxBSO6vc0EBHlJoIqhD2VHj4BBGmXmcWt+bZFUNxXp4crkuDSGijGDQ2wSP+Rl94O54o2EHBFPoZ8EPnNuWJqQgkOeEfa/XHVMuj7ZGogAP2b8=", "ewogICJ0aW1lc3RhbXAiIDogMTU5NDI4MTIzNzM5MiwKICAicHJvZmlsZUlkIiA6ICJlZDUzZGQ4MTRmOWQ0YTNjYjRlYjY1MWRjYmE3N2U2NiIsCiAgInByb2ZpbGVOYW1lIiA6ICIwMTAwMDExMDAxMDAwMDExIiwKICAic2lnbmF0dXJlUmVxdWlyZWQiIDogdHJ1ZSwKICAidGV4dHVyZXMiIDogewogICAgIlNLSU4iIDogewogICAgICAidXJsIiA6ICJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2NhMDE0NTMxYzY0ZGQ3MDMyNWJjN2FiNmMwNjI3YTY5MDAyMzE0NDY4MWQyYTQ5MDUwZDc0ZDlmMWIxNmVjMTgiCiAgICB9CiAgfQp9");
-        Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("entrance-npc-coordinates"));
+        Location location = Utils.convertStringToLoc(Utils.config.getString("entrance-npc-coordinates"));
         EntranceNpc.setProtected(true);
         EntranceNpc.spawn(location);
         teleportToDarkauction(getNearPlayers(EntranceNpc.getEntity()));
@@ -45,7 +44,7 @@ public class StartingDA {
 
 
     public List getNearPlayers(Entity entity) {
-        List<Entity> nearbyentities = entity.getNearbyEntities(10, 10, 10);
+        List<Entity> nearbyentities = entity.getNearbyEntities(5, 5, 5);
         List<Player> onlyrealplayerslist = new ArrayList<>();
 
         for (Entity en : nearbyentities) {
@@ -62,19 +61,38 @@ public class StartingDA {
         return onlyrealplayerslist;
     }
 
+    public boolean checkIfPlayerHasMoney(Player player) {
+
+
+        if (DarkAuction.getInstance().eco.getBalance(Bukkit.getOfflinePlayer(player.getUniqueId())) >= requiredmoney) {
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+
     public void teleportToDarkauction(List<Player> players) {
 
-        Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("teleport-at-start"));
+        Location location = Utils.convertStringToLoc(Utils.config.getString("teleport-at-start"));
         //badan bayad add beshe hade aghal ye meghar pool dashte bashe <--- toye config.yml ham hast darbarash !
-
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
                 for (Player player : players) {
-                    playersinauction.add(player);
-                    Utils.inauction.put(player.getName(), player.getLocation());
-                    player.teleport(location);
-                    player.sendMessage(Utils.color(Utils.prefix + "&7 You have entered the Secret Auction House!"));
+                    if (checkIfPlayerHasMoney(player)) {
+                        playersinauction.add(player);
+                        Utils.inauction.put(player.getName(), player.getLocation());
+                        player.teleport(location);
+                        Utils.biddedamount.put(player, 0);
+                        player.sendMessage(Utils.color(Utils.prefix + "&7 You have entered the Secret Auction House!"));
+                    } else {
+
+                        player.sendMessage(Utils.color(Utils.prefix + "&dEhem, but you don't have enough money to join the party. Come back when you have!"));
+                        player.playSound(player.getLocation() , Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
+                    }
 
                 }
 
@@ -84,7 +102,7 @@ public class StartingDA {
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+                Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
                 Potion potion = new Potion(PotionType.INVISIBILITY, 2);
                 potion.setSplash(true);
 
@@ -101,7 +119,7 @@ public class StartingDA {
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+                Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
                 for (Player player : playersinauction) {
 
                     player.playSound(location, Utils.stal, 1.0F, 1.0F);
@@ -130,7 +148,7 @@ public class StartingDA {
             ItemStack itemst = items.get(random.nextInt(items.size()));
             listofauctioneditems.add(itemst);
             Utils.itemRightNow = itemst;
-            Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+            Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
             Item item = location.getWorld().dropItem(location, itemst);
             item.setVelocity(new Vector());
             item.setPickupDelay(32767);
@@ -161,7 +179,7 @@ public class StartingDA {
         }
 
         Utils.itemRightNow = itemstt;
-        Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+        Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
 
         Item item = location.getWorld().dropItem(location, itemstt);
         item.setVelocity(new Vector());
@@ -190,7 +208,7 @@ public class StartingDA {
         }
 
         Utils.itemRightNow = itemstt;
-        Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+        Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
 
         Item item = location.getWorld().dropItem(location, itemstt);
         item.setVelocity(new Vector());
@@ -284,7 +302,7 @@ public class StartingDA {
             public void run() {
 
                 if (countnum <= countdown && Utils.timerstatus.get("status")) {
-                    Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+                    Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
                     location.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, location, 1);
                     location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
                     anarmorstand.remove();
@@ -304,11 +322,21 @@ public class StartingDA {
                         Player player = Bukkit.getPlayer(FirstGui.topbidplayer.get("top"));
                         player.getInventory().addItem(anitem.getItemStack());
                         Utils.guiphase.put("phase", 1);
-                        playersinauction.forEach(player1 -> {
-                            FirstGui.gui.close(player1);
-                            player1.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
+                        List<Player> newplayerlist = new ArrayList<>(playersinauction);
+                        newplayerlist.remove(Bukkit.getPlayer(FirstGui.topbidplayer.get("top")));
+                        for (Player player1 : newplayerlist) {
+
+                            DarkAuction.getInstance().eco.depositPlayer(Bukkit.getOfflinePlayer(player1.getUniqueId()), Utils.biddedamount.get(player1));
+
+                        }
+                        playersinauction.forEach(player2 -> {
+                            Utils.biddedamount.put(player2, 0);
+                            FirstGui.gui.close(player2);
+
+                            player2.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
                         });
                         FirstGui.topbidplayer.clear();
+
                         executeNextLevel();
                     }
                 } else if (Utils.timerstatus.get("status")){
@@ -371,7 +399,7 @@ public class StartingDA {
         EntranceNpc.despawn();
         EntranceNpc.destroy();
         Utils.guiphase.put("phase", 1);
-        Location location = Utils.convertStringToLoc(DarkAuction.getInstance().getConfig().getString("itemshowcase"));
+        Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
         playersinauction.forEach(player -> {
             player.stopSound(Utils.stal);
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
