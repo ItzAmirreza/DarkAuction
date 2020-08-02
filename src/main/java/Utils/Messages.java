@@ -16,4 +16,5 @@ public class Messages {
     public static String guiNSecondstobid = Utils.config.getString("messages.guitimeremaining");
     public static String ahfinished = Utils.config.getString("messages.ahfinished");
     public static String topbidholo = Utils.config.getString("messages.topbidholo");
+    public static String alreadyhighest = Utils.config.getString("messages.alreadyhighest");
 }

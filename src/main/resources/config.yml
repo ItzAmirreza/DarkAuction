@@ -35,6 +35,7 @@ messages:
   guitimeremaining: "&eRemaining Time: &b%time% &eSeconds"
   ahfinished: "&bHope you had a great time with our secret ah :) But don't tell anyone!"
   topbidholo: "&cTop Bid: &b%amount% &eCoins ◈ &bBy %player%"
+  alreadyhighest: "&cYou have already bidded the highest amount!"
 
 
 
