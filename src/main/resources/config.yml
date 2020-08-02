@@ -4,19 +4,39 @@
 
 
 #where an npc spawns before the DarkAuction starts and let them in...
-entrance-npc-coordinates: "10/80/121"
+entrance-npc-coordinates: "none"
 
 #where they will get teleported after they where close to entrance npc
-teleport-at-start: "10/25/123"
+teleport-at-start: "none"
 
 #Item showcase location
-itemshowcase: "10//123/123"
+itemshowcase: "none"
 
 #An amount of money that is required at least to have to let you enter the DarkAuction
 money-required-to-enter: 500
 
 #How many players can enter the DarkAuction | To prevent so much player inside of the DarkAuction and make it more valuable.
 limitplayer: 15
+
+leastplayer: 1
+
+messages:
+  bidpage: "&6Bid Page"
+  higherthanthisamount: "&cThere is a bid higher than this amount!"
+  playerhasbiddedx: "&b%player% &7Has bidded &c%amount% &eCoins ◈&7!"
+  notenoughmoney: "&cYou don't have enough money to pay!"
+  enteredah: "&7You have entered the Secret Auction House!"
+  needmoneytojoin: "&dEhem, but you don't have enough money to join the party. Come back when you have!"
+  notenoughmembers: "&cSorry! But not enough members. Shop is closed!"
+  topbid: "&cTop Bid: "
+  nobid: "&7No one has bidded for this item... Poor item..."
+  playerhaswon: "&e&l%player% &7Won the item for &e%amount% Coins ◈"
+  nsecondstobid: "&bYou have &e%time% &bSeconds to bid!"
+  guitimeremaining: "&eRemaining Time: &b%time% &eSeconds"
+  ahfinished: "&bHope you had a great time with our secret ah :) But don't tell anyone!"
+  topbidholo: "&cTop Bid: &b%amount% &eCoins ◈ &bBy %player%"
+
+
 
 
 

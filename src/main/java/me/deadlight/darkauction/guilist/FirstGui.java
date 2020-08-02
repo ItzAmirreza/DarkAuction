@@ -1,6 +1,6 @@
 package me.deadlight.darkauction.guilist;
 
-import Utils.Utils;
+import Utils.*;
 import me.deadlight.darkauction.DarkAuction;
 import me.deadlight.darkauction.tasks.StartingDA;
 import me.mattstudios.mfgui.gui.components.xseries.XMaterial;
@@ -24,7 +24,7 @@ public class FirstGui {
     //phase 2 --> gold ingot
     //phase 3 --> emerald ingot
     //phase 4 --> Diamond
-    public static Gui gui = new Gui(DarkAuction.getInstance(), 6, Utils.color("&6Bid Page"));
+    public static Gui gui = new Gui(DarkAuction.getInstance(), 6, Utils.color(Messages.bidpage));
     public static GuiItem graystainedglass = new GuiItem(itemgrey);
     //red border
     public static GuiItem redstainedglass = new GuiItem(itemred);
@@ -97,7 +97,7 @@ public class FirstGui {
                 if (event.getCurrentItem().getType() == Material.BARRIER) {
 
                     event.setCancelled(true);
-                    event.getWhoClicked().sendMessage(Utils.color("&cThere is a bid higher than this amount!"));
+                    event.getWhoClicked().sendMessage(Utils.color(Messages.higherthanthisamount));
                     Player player = (Player) event.getWhoClicked();
                     player.playNote(player.getLocation(), Instrument.BASS_DRUM, Note.natural(1, Note.Tone.E));
 
@@ -119,8 +119,9 @@ public class FirstGui {
                                 player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
                                 ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
                                 for (Player player1 : StartingDA.playersinauction) {
+                                    //has bidded message
 
-                                    player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
+                                    player1.sendMessage(Utils.color(Messages.playerhasbiddedx.replace("%player%", player.getName()).replace("%amount%", Integer.toString(biddedamount))));
                                     player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
 
                                 }
@@ -142,7 +143,7 @@ public class FirstGui {
                             } else {
 
                                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
-                                player.sendMessage(Utils.color(Utils.prefix + "&cYou don't have enough money to pay!"));
+                                player.sendMessage(Utils.color(Utils.prefix + Messages.notEnoughMoney));
 
                             }
                         } else {
@@ -158,7 +159,7 @@ public class FirstGui {
                                 ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
                                 for (Player player1 : StartingDA.playersinauction) {
 
-                                    player1.sendMessage(Utils.color("&e" + player.getName() + " &7Has bidded &c" + Integer.toString(biddedamount) + "&e Coins ◈&7!"));
+                                    player1.sendMessage(Utils.color(Messages.playerhasbiddedx.replace("%player%", player.getName()).replace("%amount%", Integer.toString(biddedamount))));
                                     player1.playSound(player1.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0F, 1.5F);
 
                                 }
@@ -173,7 +174,7 @@ public class FirstGui {
 
                     } else if (topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
                         Player player = (Player) event.getWhoClicked();
-                        player.sendMessage(Utils.color("&cYou are already the top bidder!"));
+                        player.sendMessage(Utils.color(Utils.prefix + Messages.notEnoughMoney));
                         player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1.0F, 2.0F);
 
                     }
