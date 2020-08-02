@@ -32,7 +32,7 @@ public final class DarkAuction extends JavaPlugin {
                     getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&bPlaceHolders successfully loaded."));
                 } else {
 
-                    getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&6Couldn't PlaceHoldersApi plugin for registering placeholders."));
+                    getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&6Couldn't find PlaceHoldersApi plugin for registering placeholders."));
 
                 }
             } else {

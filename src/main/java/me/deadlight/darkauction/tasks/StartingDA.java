@@ -87,10 +87,10 @@ public class StartingDA {
                         Utils.inauction.put(player.getName(), player.getLocation());
                         player.teleport(location);
                         Utils.biddedamount.put(player, 0);
-                        player.sendMessage(Utils.color(Utils.prefix + "&7 You have entered the Secret Auction House!"));
+                        player.sendMessage(Utils.color(Utils.prefix + Messages.enteredAh));
                     } else {
 
-                        player.sendMessage(Utils.color(Utils.prefix + "&dEhem, but you don't have enough money to join the party. Come back when you have!"));
+                        player.sendMessage(Utils.color(Utils.prefix + Messages.needmoneytojoin));
                         player.playSound(player.getLocation() , Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
                     }
 
@@ -142,7 +142,7 @@ public class StartingDA {
 
                     for (Player player : playersinauction) {
 
-                        player.sendMessage(Utils.color("Sorry! But not enough members. Shop is closed!"));
+                        player.sendMessage(Utils.color(Utils.prefix + Messages.notEnoughMembers));
 
                     }
                     closeAuction();
@@ -158,30 +158,20 @@ public class StartingDA {
     //first item auction
     public void startFirstItem(List<DAItem> items) {
 
-        if (items.size() == 0) {
-
-            Bukkit.broadcastMessage(Utils.color(Utils.prefix + "&cNo items for today's auction!"));
-            closeAuction();
-        } else {
-
-
-
-            DAItem itemst = items.get(random.nextInt(items.size()));
-            listofauctioneditems.add(itemst);
-            Utils.itemRightNow = itemst;
-            Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-            Item item = location.getWorld().dropItem(location, itemst.getItemStack());
-            item.setVelocity(new Vector());
-            item.setPickupDelay(32767);
-            item.setInvulnerable(true);
-            item.setGravity(false);
-            Utils.itemRightNow.setItem(item);
-            Utils.auctionlevel.put("level", 1);
-            spawnArmorStand(location, item, itemst);
+        DAItem itemst = items.get(random.nextInt(items.size()));
+        listofauctioneditems.add(itemst);
+        Utils.itemRightNow = itemst;
+        Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
+        Item item = location.getWorld().dropItem(location, itemst.getItemStack());
+        item.setVelocity(new Vector());
+        item.setPickupDelay(32767);
+        item.setInvulnerable(true);
+        item.setGravity(false);
+        Utils.itemRightNow.setItem(item);
+        Utils.auctionlevel.put("level", 1);
+        spawnArmorStand(location, item, itemst);
 
 
-
-        }
 
     }
 
@@ -255,15 +245,15 @@ public class StartingDA {
                 anarmorstand.setGravity(false);
                 if (!daItem.getItemStack().getItemMeta().hasDisplayName()) {
 
-                    String itemlore = item.getItemStack().getType().name();
-                    anarmorstand.setCustomName(Utils.color("&a&l" + itemlore));
+                    String itemname = item.getItemStack().getType().name();
+                    anarmorstand.setCustomName(Utils.color("&a&l" + itemname));
                     anarmorstand.setCustomNameVisible(true);
                     startCountDown(item);
 
                 } else {
 
-                    String itemlore = item.getItemStack().getItemMeta().getDisplayName();
-                    anarmorstand.setCustomName(Utils.color(itemlore));
+                    String itemname = item.getItemStack().getItemMeta().getDisplayName();
+                    anarmorstand.setCustomName(Utils.color(itemname));
                     anarmorstand.setCustomNameVisible(true);
                     startCountDown(item);
                 }
@@ -295,7 +285,7 @@ public class StartingDA {
             topbidarmor.setVisible(false);
             topbidarmor.setArms(false);
             topbidarmor.setGravity(false);
-            topbidarmor.setCustomName(Utils.color("&cTop Bid: &b" + "0 &eCoins ◈"));
+            topbidarmor.setCustomName(Utils.color(Messages.topbid + "&b0 &eCoins ◈"));
 
         } else {
 
@@ -311,7 +301,7 @@ public class StartingDA {
             topbidarmor.setVisible(false);
             topbidarmor.setArms(false);
             topbidarmor.setGravity(false);
-            topbidarmor.setCustomName(Utils.color("&cTop Bid: &b" + "0 &eCoins ◈"));
+            topbidarmor.setCustomName(Utils.color(Messages.topbid + "0 &eCoins ◈"));
 
             startTimerTask();
 
@@ -341,7 +331,7 @@ public class StartingDA {
                     if (FirstGui.topbidplayer.isEmpty()) {
                         playersinauction.forEach(player -> {
                             FirstGui.gui.close(player);
-                            player.sendMessage(Utils.color("&7No one has bidded for this item... Poor item..."));
+                            player.sendMessage(Utils.color(Utils.prefix + Messages.nobid));
                         });
                         executeNextLevel();
                     } else {
@@ -359,7 +349,7 @@ public class StartingDA {
                             Utils.biddedamount.put(player2, 0);
                             FirstGui.gui.close(player2);
 
-                            player2.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
+                            player2.sendMessage(Utils.color(Utils.prefix + Messages.playerhaswon.replace("%player%", FirstGui.topbidplayer.get("top")).replace("%amount%", Integer.toString(FirstGui.topbid.get(FirstGui.topbidplayer.get("top"))))));
                         });
                         FirstGui.topbidplayer.clear();
                         FirstGui.topbid.clear();
@@ -369,12 +359,12 @@ public class StartingDA {
                 } else if (Utils.timerstatus.get("status")){
 
                     topbidarmor.setCustomNameVisible(true);
-                    antimerarmor.setCustomName(Utils.color("&bYou have &e" + Integer.toString(countnum) + " &bSeconds to bid!"));
+                    antimerarmor.setCustomName(Utils.color(Messages.nsecondstobid.replace("%time%", Integer.toString(countnum))));
                     antimerarmor.setCustomNameVisible(true);
                     ItemStack timegui = XMaterial.CLOCK.parseItem();
                     timegui.setAmount(countnum);
                     ItemMeta meta = timegui.getItemMeta();
-                    meta.setDisplayName(Utils.color("&eRemaining Time: " + Integer.toString(countnum) + " &eSeconds"));
+                    meta.setDisplayName(Utils.color(Messages.guiNSecondstobid.replace("%time%", Integer.toString(countnum))));
                     timegui.setItemMeta(meta);
                     FirstGui.gui.updateItem(4, new GuiItem(timegui));
                     countnum -= 1;
@@ -444,13 +434,13 @@ public class StartingDA {
         for (Player player : playersinauction) {
 
             player.teleport(Utils.inauction.get(player.getName()));
-            player.sendMessage(Utils.color(Utils.prefix + "&bHope you had a great time :)"));
+            player.sendMessage(Utils.color(Utils.prefix + Messages.ahfinished));
 
         }
 
     }
     public static void spawnBiddingHolo(int amount, String bidder) {
-        topbidarmor.setCustomName(Utils.color("&cTop Bid: &b" + Integer.toString(amount) + " &eCoins ◈" + " &bBy " + bidder));
+        topbidarmor.setCustomName(Utils.color(Messages.topbidholo.replace("%amount%", Integer.toString(amount)).replace("%player%", bidder)));
         topbidarmor.setCustomNameVisible(true);
 
     }
