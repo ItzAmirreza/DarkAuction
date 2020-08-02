@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class FirstGui {
 
@@ -111,6 +112,9 @@ public class FirstGui {
 
                             if (Utils.hasEnoughMoney(player, biddedamount)) {
                                 Utils.takeMoney(player, biddedamount);
+                                if (isBombingBid(biddedamount)) {
+                                    Bombing(player);
+                                }
                                 topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
                                 topbidplayer.put("top", event.getWhoClicked().getName());
                                 gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
@@ -150,6 +154,7 @@ public class FirstGui {
 
                             if (Utils.hasEnoughMoney(player, biddedamount)) {
                                 Utils.takeMoney(player, biddedamount);
+
                                 topbid.put(event.getWhoClicked().getName(), Integer.parseInt(ChatColor.stripColor(event.getCurrentItem().getItemMeta().getDisplayName()).replace("Coins", "").replace("◈", "").replace(" ", "")));
                                 topbidplayer.put("top", event.getWhoClicked().getName());
                                 gui.updateItem(i, getPlayerHead(event.getWhoClicked().getName(), findRightAmount(i)));
@@ -157,6 +162,7 @@ public class FirstGui {
                                 StartingDA.spawnBiddingHolo(biddedamount, player.getName());
                                 player.playSound(player.getLocation(), Sound.BLOCK_METAL_PLACE, 1.0F, 1.0F);
                                 ChangeToBarrierSlot(findPreviousBids(findRightAmount(i), player));
+
                                 for (Player player1 : StartingDA.playersinauction) {
 
                                     player1.sendMessage(Utils.color(Messages.playerhasbiddedx.replace("%player%", player.getName()).replace("%amount%", Integer.toString(biddedamount))));
@@ -167,14 +173,14 @@ public class FirstGui {
                             } else {
 
                                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1.0F, 1.0F);
-                                player.sendMessage(Utils.color(Utils.prefix + "&cYou don't have enough money to pay!"));
+                                player.sendMessage(Utils.color(Utils.prefix + Messages.notEnoughMoney));
                             }
 
                         }
 
                     } else if (topbidplayer.get("top").equals(event.getWhoClicked().getName())) {
                         Player player = (Player) event.getWhoClicked();
-                        player.sendMessage(Utils.color(Utils.prefix + Messages.notEnoughMoney));
+                        player.sendMessage(Utils.color(Utils.prefix + Messages.alreadyhighest));
                         player.playSound(player.getLocation(), Sound.BLOCK_LAVA_POP, 1.0F, 2.0F);
 
                     }
@@ -397,6 +403,43 @@ public class FirstGui {
         }
 
         return price;
+    }
+
+    public static boolean isBombingBid(int amount) {
+        int modifier = Utils.itemRightNow.getModifier();
+        int previousamount = topbid.get(topbidplayer.get("top"));
+
+        if (amount - previousamount >= modifier * 4) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    public static void Bombing(Player player) {
+
+        Location location = player.getLocation();
+        Random random = new Random();
+        int count = 0;
+        int numcount = 5;
+        int low = location.getBlockZ() - 5;
+        int high = location.getBlockZ() + 4;
+
+        while (!(count > 5)) {
+            location.getWorld().spawnParticle(Particle.DRAGON_BREATH, location, 1);
+            int result = random.nextInt(high-low) + low;
+            location.setZ(result);
+            location.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, location, 1);
+            location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1.0F, 1.0F);
+
+            count++;
+        }
+
     }
 
 }
