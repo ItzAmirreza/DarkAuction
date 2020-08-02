@@ -388,9 +388,10 @@ public class FirstGui {
 
     public static int findRightPrice(int slot) {
         int initialamount = 0;
+        int modifier = Utils.itemRightNow.getModifier();
         int price = Utils.itemRightNow.getPrice();
         while (initialamount != findRightAmount(slot)) {
-            price = price + 150;
+            price = price + modifier;
             initialamount++;
         }
 

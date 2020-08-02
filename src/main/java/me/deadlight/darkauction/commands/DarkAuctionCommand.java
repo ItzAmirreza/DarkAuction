@@ -5,7 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 
 public class DarkAuctionCommand implements CommandExecutor {
@@ -31,7 +30,7 @@ public class DarkAuctionCommand implements CommandExecutor {
 
                     } else if (args[0].equalsIgnoreCase("setup")) {
 
-                        player.sendMessage(Utils.color(Utils.prefix + "&eSetup section: do the following commands step by step. \n &7/da entrancenpc &f- &dSets the location of Entrance NPC (where you are standing) \n &7/da teleportloc &f- &dSets the location of Players getting teleported after being accepted by DarkAuctioner \n &7/da itemshowcase &f- &dSets the location of item that comes up for auction"));
+                        player.sendMessage(Utils.color(Utils.prefix + "&eSetup section: execute the following commands step by step. \n &7/da entrancenpc &f- &dSets the location of Entrance NPC (where you are standing) \n &7/da teleportloc &f- &dSets the location of Players getting teleported after being accepted by DarkAuctioner \n &7/da itemshowcase &f- &dSets the location of item that comes up for auction"));
                         //set entrance npc
 
                         //set teleport location
@@ -40,12 +39,13 @@ public class DarkAuctionCommand implements CommandExecutor {
 
 
                     } else if (args[0].equalsIgnoreCase("additem")) {
-                        if (args.length >= 2) {
+                        if (args.length >= 3) {
 
                             try {
+                                int modifier = Integer.parseInt(args[2]);
                                 int price = Integer.parseInt(args[1]);
                                 try {
-                                    DAItem item = new DAItem(player.getInventory().getItemInMainHand(), price);
+                                    DAItem item = new DAItem(player.getInventory().getItemInMainHand(), price, modifier);
                                     if (item.getItemStack() != null && !Utils.auctionitems.contains(item)) {
                                         Utils.auctionitems.add(item);
                                         player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
@@ -62,14 +62,14 @@ public class DarkAuctionCommand implements CommandExecutor {
                                 }
                             } catch (NumberFormatException exception) {
 
-                                player.sendMessage(Utils.color(Utils.prefix + "&cPlease put a number for the price."));
+                                player.sendMessage(Utils.color(Utils.prefix + "&cPlease put a number for the price and modifier."));
 
                             }
 
 
                         } else {
 
-                            player.sendMessage(Utils.color(Utils.prefix + "&6You are missing an argument! &c/da additem price"));
+                            player.sendMessage(Utils.color(Utils.prefix + "&6You are missing an argument! &c/da additem price modifier"));
 
                         }
 

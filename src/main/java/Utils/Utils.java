@@ -3,8 +3,6 @@ import me.deadlight.darkauction.DarkAuction;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +35,8 @@ public class Utils {
     public static List<DAItem> auctionitems = new ArrayList<>();
 
     public static DAItem itemRightNow;
+
+    public static boolean ahstatus = false;
 
     public static HashMap<String, Integer> guiphase = new HashMap<>();
 

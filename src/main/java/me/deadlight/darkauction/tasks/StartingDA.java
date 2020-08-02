@@ -98,37 +98,58 @@ public class StartingDA {
 
             }
         }, 20 * 5);
-        //splashing invisibility
-        Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
-            @Override
-            public void run() {
-                Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-                Potion potion = new Potion(PotionType.INVISIBILITY, 2);
-                potion.setSplash(true);
-
-
-                ItemStack potionstack = new ItemStack(Material.SPLASH_POTION);
-                playersinauction.forEach(player -> {
-                    ThrownPotion thrownPotion = player.launchProjectile(ThrownPotion.class);
-                    thrownPotion.setItem(potionstack);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 5000, 2));
-                });
-            }
-        }, 20 * 10);
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-                for (Player player : playersinauction) {
 
-                    player.playSound(location, Utils.stal, 1.0F, 1.0F);
+                if (playersinauction.size() > 0) {
 
+                    Utils.ahstatus = true;
+                    //splashing invisibility
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
+                            Potion potion = new Potion(PotionType.INVISIBILITY, 2);
+                            potion.setSplash(true);
+
+
+                            ItemStack potionstack = new ItemStack(Material.SPLASH_POTION);
+                            playersinauction.forEach(player -> {
+                                ThrownPotion thrownPotion = player.launchProjectile(ThrownPotion.class);
+                                thrownPotion.setItem(potionstack);
+                                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 5000, 2));
+                            });
+                        }
+                    }, 20 * 10);
+
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
+                        @Override
+                        public void run() {
+                            Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
+                            for (Player player : playersinauction) {
+
+                                player.playSound(location, Utils.stal, 1.0F, 1.0F);
+
+                            }
+                            startFirstItem(Utils.auctionitems);
+
+                        }
+                    }, 20 * 15);
+
+                } else {
+
+                    for (Player player : playersinauction) {
+
+                        player.sendMessage(Utils.color("Sorry! But not enough members. Shop is closed!"));
+
+                    }
+                    closeAuction();
                 }
-                startFirstItem(Utils.auctionitems);
 
             }
-        }, 20 * 15);
+        }, 20 * 7);
 
 
     }
@@ -181,7 +202,7 @@ public class StartingDA {
 
         Utils.itemRightNow = itemstt;
         Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-
+        listofauctioneditems.add(itemstt);
         Item item = location.getWorld().dropItem(location, itemstt.getItemStack());
         item.setVelocity(new Vector());
         item.setPickupDelay(32767);
@@ -211,7 +232,7 @@ public class StartingDA {
 
         Utils.itemRightNow = itemstt;
         Location location = Utils.convertStringToLoc(Utils.config.getString("itemshowcase"));
-
+        listofauctioneditems.add(itemstt);
         Item item = location.getWorld().dropItem(location, itemstt.getItemStack());
         item.setVelocity(new Vector());
         item.setPickupDelay(32767);
@@ -341,6 +362,7 @@ public class StartingDA {
                             player2.sendMessage(Utils.color("&e&l" + FirstGui.topbidplayer.get("top") + " &7Won the item for " + "&e" + FirstGui.topbid.get(FirstGui.topbidplayer.get("top")) + " &eCoins ◈"));
                         });
                         FirstGui.topbidplayer.clear();
+                        FirstGui.topbid.clear();
 
                         executeNextLevel();
                     }
@@ -400,7 +422,9 @@ public class StartingDA {
 
     public void closeAuction() {
 
+        Utils.ahstatus = false;
         listofauctioneditems.clear();
+        Utils.itemRightNow = null;
         EntranceNpc.despawn();
         EntranceNpc.destroy();
         Utils.guiphase.put("phase", 1);

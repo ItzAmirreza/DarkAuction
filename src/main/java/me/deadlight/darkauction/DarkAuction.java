@@ -1,5 +1,5 @@
 package me.deadlight.darkauction;
-import Utils.Utils;
+import Utils.*;
 import me.deadlight.darkauction.commands.DarkAuctionCommand;
 import me.deadlight.darkauction.events.PlayerInteractWithEntity;
 import me.deadlight.darkauction.tasks.StartingDA;
@@ -27,6 +27,14 @@ public final class DarkAuction extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Citizens") != null) {
             if (setupEconomy()) {
                 getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&aPlugin Has Been Enabled."));
+                if(getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+                    new PlaceHolders(this).register();
+                    getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&bPlaceHolders successfully loaded."));
+                } else {
+
+                    getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&6Couldn't PlaceHoldersApi plugin for registering placeholders."));
+
+                }
             } else {
 
                 getServer().getConsoleSender().sendMessage(Utils.color(Utils.prefix + "&cThis plugin requires Vault Plugin."));

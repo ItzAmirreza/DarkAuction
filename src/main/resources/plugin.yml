@@ -5,6 +5,7 @@ api-version: 1.13
 authors: [Dead_Light]
 description: Hypixel Dark Auction remade
 depend: [Citizens, Vault]
+softdepend: [PlaceholderAPI]
 commands:
   da:
     description: the main command which is used for server admin
