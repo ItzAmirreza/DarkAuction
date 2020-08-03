@@ -29,7 +29,9 @@ public class StartingDA {
         Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
             @Override
             public void run() {
-                entrancenpcspawn();
+                if (!Utils.ahstatus) {
+                    entrancenpcspawn();
+                }
             }
         }, 20 * (60 * Utils.config.getInt("ah-starts-every-x-minutes")));
 

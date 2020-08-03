@@ -1,6 +1,7 @@
 package me.deadlight.darkauction.commands;
 import Utils.*;
 import me.deadlight.darkauction.tasks.StartingDA;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -46,7 +47,7 @@ public class DarkAuctionCommand implements CommandExecutor {
                                 int price = Integer.parseInt(args[1]);
                                 try {
                                     DAItem item = new DAItem(player.getInventory().getItemInMainHand(), price, modifier);
-                                    if (item.getItemStack() != null && !Utils.auctionitems.contains(item)) {
+                                    if (item.getItemStack() != null && !Utils.auctionitems.contains(item) && item.getItemStack().getType() != Material.AIR) {
                                         Utils.auctionitems.add(item);
                                         player.sendMessage(Utils.color(Utils.prefix + "&bSuccessfully added to the list of next coming auction."));
 
