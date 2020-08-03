@@ -23,6 +23,19 @@ import java.util.Random;
 
 public class StartingDA {
 
+    public void start() {
+
+
+        Bukkit.getScheduler().scheduleSyncDelayedTask(DarkAuction.getInstance(), new Runnable() {
+            @Override
+            public void run() {
+                entrancenpcspawn();
+            }
+        }, 20 * (60 * Utils.config.getInt("ah-starts-every-x-minutes")));
+
+
+    }
+
     public static int requiredmoney = Utils.config.getInt("money-required-to-enter");
     public static List<DAItem> listofauctioneditems = new ArrayList<>();
     public Random random = new Random();

@@ -100,8 +100,8 @@ public class DarkAuctionCommand implements CommandExecutor {
                     } else if (args[0].equalsIgnoreCase("start")) {
                         //test part - will get removed after main release
                         if (Utils.auctionitems.size() >= 3) {
-                            da.entrancenpcspawn();
-                            player.sendMessage(Utils.color("&aAuction has started!"));
+                            da.start();
+                            player.sendMessage(Utils.color("&aAuction process has started! (Depending on what you have configured in config.yml)"));
 
                         } else {
 

@@ -12,6 +12,9 @@ teleport-at-start: "none"
 #Item showcase location
 itemshowcase: "none"
 
+#in minutes
+ah-starts-every-x-minutes: 300
+
 #An amount of money that is required at least to have to let you enter the DarkAuction
 money-required-to-enter: 500
 
