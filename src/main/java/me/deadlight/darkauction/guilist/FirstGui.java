@@ -407,18 +407,22 @@ public class FirstGui {
 
     public static boolean isBombingBid(int amount) {
         int modifier = Utils.itemRightNow.getModifier();
-        int previousamount = topbid.get(topbidplayer.get("top"));
+        if (topbidplayer.containsKey("top")) {
+            int previousamount = topbid.get(topbidplayer.get("top"));
 
-        if (amount - previousamount >= modifier * 4) {
+            if (amount - previousamount >= modifier * 4) {
 
-            return true;
+                return true;
 
+            } else {
+
+                return false;
+
+            }
         } else {
 
             return false;
-
         }
-
     }
 
     public static void Bombing(Player player) {
